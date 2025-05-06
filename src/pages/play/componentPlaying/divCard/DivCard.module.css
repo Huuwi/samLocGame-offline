@@ -1,0 +1,7 @@
+.divCardContainer {
+    background-image: url("../../../../public/cardImages/backCard.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 80px;
+    width: 40px;
+}

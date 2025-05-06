@@ -1,0 +1,25 @@
+.imgCard {
+    position: relative;
+}
+
+.cardContainer {
+    position: relative;
+
+}
+
+.cardContainer:hover {
+    /* transform: scale(1.05) translateY(-5px); */
+    scale: 1.01;
+    box-shadow: 50px 50px rgba(15, 199, 24, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.img1,
+.img2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("../../../public/cardImages/back.png");
+    border-radius: 10px;
+}

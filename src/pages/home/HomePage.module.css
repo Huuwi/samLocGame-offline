@@ -1,0 +1,19 @@
+.homeContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgCard {
+    position: relative;
+}
+
+.img1,
+.img2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("../../../public/cardImages/back.png");
+    border-radius: 10px;
+}

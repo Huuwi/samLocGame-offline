@@ -1,0 +1,40 @@
+.playContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.table {
+    background-image: url("../../../public/cardImages/table.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 750px;
+    width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.cardDeck {
+    height: 250px;
+    width: 100px;
+    background-image: url("../../../public/cardImages/backCard.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fightBtn:hover {
+    background-color: aquamarine;
+    scale: 1.1;
+    cursor: pointer;
+}
+
+.fightBtn {
+    margin-bottom: 20px;
+}
