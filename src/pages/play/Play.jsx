@@ -8,6 +8,9 @@ import { divCard } from './logic.mjs';
 import Card from './card/Card';
 import CardsOfPlayers from './componentPlaying/CardsOfPlayers/CardsOfPlayers';
 import Test from './Test';
+import { playing } from './logic.mjs';
+import CardInTable from './componentPlaying/CardInTable/CardInTable';
+
 
 const Play = ({ players }) => {
 
@@ -49,6 +52,15 @@ const Play = ({ players }) => {
 
         let rectCardDeck = cardDeckRef.current.getBoundingClientRect();
 
+        disPatch(disPatchMethods.setRectDeckCard({
+            rectCardDeck: {
+                x: rectCardDeck.x,
+                y: rectCardDeck.y,
+                width: rectCardDeck.width,
+                height: rectCardDeck.height,
+            }
+        }));
+
         const motion = <AnimateDivCard loop={10} rectArr={rectArr.current} rectCardDeck={rectCardDeck} duration={0.01} cbr={cbr} />
 
         setDivCardMotion(motion);
@@ -82,7 +94,7 @@ const Play = ({ players }) => {
                 setMyCards(<CardsOfPlayers />);
                 clearInterval(interval2)
                 // setTimeout(() => {
-                //     disPatch(removeCard({ indexArr: [0, 1, 2] }))
+                //     disPatch(disPatchMethods.changeCard({ indexFirst: 0, indexSecond: 5 }))
                 // }, 10000);
                 setDivDone(true)
             }
@@ -98,6 +110,43 @@ const Play = ({ players }) => {
         }, 100)
     }, [clickDiv])
 
+    function handleClickPlay() {
+        const selectedCards = playingStore.getState().selectedCards
+        const cardInTable = playingStore.getState().cardInTable
+        let selectedCardType = playing.indentifyTypeCards(selectedCards)
+
+        if (!selectedCardType.type) {
+            alert("CardType invalid!")
+            return
+        }
+        let check = playing.checkValidPlaying(selectedCards, cardInTable)
+
+        if (!check.state) {
+            alert(check.message)
+            return
+        }
+
+        disPatch(disPatchMethods.updateCardInTable())
+        disPatch(disPatchMethods.removeCardByValue({ valueArr: selectedCards }))
+        disPatch(disPatchMethods.clearSelectedStatus())
+        disPatch(disPatchMethods.increTurn())
+
+        const rest = playingStore.getState().valueCardPlayers[(playingStore.getState().turn - 1) % playingStore.getState().numberOfPlayers]
+
+        if (!rest.length) {
+            alert("you win!")
+            location.reload()
+        }
+
+    }
+
+    function handleClickSkip() {
+        if (!playingStore.getState().cardInTable?.length) {
+            alert("your turn!")
+            return
+        }
+        disPatch(disPatchMethods.increSkip())
+    }
 
     return (
         <div className={styles["playContainer"]}>
@@ -110,13 +159,17 @@ const Play = ({ players }) => {
                     {!clickDiv ? <button style={{ height: "30px", width: "80px", marginBottom: "90px" }} onClick={handleClickDiv}>Chia bai</button> : <p />}
                 </div> : null}
 
+                {divDone ? <CardInTable /> : null}
+
                 <div style={{ display: "flex" }}>
                     {playerDivs.length > 3 ? playerDivs.slice(3) : <div />}
                 </div>
                 {clickDiv ? divCardMotion : <p />}
 
             </div>
-            {<button className={styles["fightBtn"]}>Danh bai</button>}
+            {<button className={styles["fightBtn"]} onClick={handleClickPlay} >Danh bai</button>}
+
+            {<button className={styles["skipBtn"]} onClick={handleClickSkip} >Bo qua</button>}
 
             {divDone ? myCards : null}
             {/* <Test /> */}

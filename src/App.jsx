@@ -6,8 +6,12 @@ import Play from './pages/play/Play'
 
 const App = () => {
 
+  // let demoPlayers = [
+  //   { name: "nguyenHuuDuc", img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi2haw1278i40sszGwCvy7LKP3j2KqLTnPJg&s' }, { name: "nguyenHuuHa", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKYH4sR1-krNloWi-Iq94f-SSB09BSGlHJVA&s" }, { name: "phamThiHanh", img: "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid&w=740" }, { name: "phamThiHanh", img: "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid&w=740" }
+  // ]
+
   let demoPlayers = [
-    { name: "nguyenHuuDuc", img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi2haw1278i40sszGwCvy7LKP3j2KqLTnPJg&s' }, { name: "nguyenHuuHa", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKYH4sR1-krNloWi-Iq94f-SSB09BSGlHJVA&s" }, { name: "phamThiHanh", img: "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid&w=740" }, { name: "phamThiHanh", img: "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid&w=740" }
+    { name: "phamThiHanh", img: "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid&w=740" }, { name: "phamThiHanh", img: "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg?semt=ais_hybrid&w=740" }
   ]
 
   return (

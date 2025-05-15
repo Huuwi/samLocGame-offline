@@ -1,5 +1,4 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit"
-import { cardMap } from "../logic.mjs"
 
 const quantityCardPlayers = [0, 0, 0, 0, 0, 0]
 
@@ -15,10 +14,14 @@ const cardInTable = []
 
 const numberOfPlayers = 0
 
+const rectDeckCard = null
+
+const skip = 0
+
 const slice = createSlice({
     name: "playingSlice",
     initialState: {
-        quantityCardPlayers, valueCardPlayers, selectedCards, turn, numberOfPlayers, cardInTable
+        quantityCardPlayers, valueCardPlayers, selectedCards, turn, numberOfPlayers, cardInTable, rectDeckCard, skip
     },
     reducers: {
         addQuantity: (state, action) => {
@@ -35,9 +38,6 @@ const slice = createSlice({
                 state.valueCardPlayers[i] = divCardArr[i]
             }
         },
-        addSelectedCards: (state, action) => {
-
-        },
         increTurn: (state, action) => {
             state.turn++
         },
@@ -51,7 +51,7 @@ const slice = createSlice({
             let { numberOfPlayers } = action.payload
             state.numberOfPlayers = numberOfPlayers
         },
-        removeCard: (state, action) => {
+        removeCardByIndex: (state, action) => {
             let count = 0
             let { indexArr } = action.payload
             for (let e of indexArr) {
@@ -59,12 +59,19 @@ const slice = createSlice({
                 count++
             }
         },
+        removeCardByValue: (state, action) => {
+            let { valueArr } = action.payload
+            for (let e of valueArr) {
+                let cards = state.valueCardPlayers[state.turn % state.numberOfPlayers]
+                cards.splice(cards.indexOf(e), 1)
+            }
+        },
         changeSelectedStatus: (state, action) => {
-            let { cardIndex } = action.payload
-            if (state.selectedCards.includes(cardIndex)) {
-                state.selectedCards.splice(state.selectedCards.indexOf(cardIndex), 1)
+            let { imageName } = action.payload
+            if (state.selectedCards.includes(imageName)) {
+                state.selectedCards.splice(state.selectedCards.indexOf(imageName), 1)
             } else {
-                state.selectedCards.push(cardIndex)
+                state.selectedCards.push(imageName)
             }
         },
         clearSelectedStatus: (state, action) => {
@@ -78,7 +85,36 @@ const slice = createSlice({
             for (let e of indexArr) {
                 state.cardInTable.push()
             }
+        },
+        changeCard: (state, action) => {
+            let { indexFirst, indexSecond } = action.payload;
+            let indexPlayer = state.turn % state.numberOfPlayers;
+
+            let cards = state.valueCardPlayers[indexPlayer];
+
+            // Nếu vị trí giống nhau hoặc liền kề sau thì không làm gì
+            if (indexFirst === indexSecond || indexSecond === indexFirst + 1) return;
+
+            const [movedCard] = cards.splice(indexSecond, 1); // Lấy và xóa phần tử ở indexSecond
+            cards.splice(indexFirst + 1, 0, movedCard);       // Chèn vào sau indexFirst
+        },
+        updateCardInTable: (state, action) => {
+            state.cardInTable = [...state.selectedCards]
+        },
+        setRectDeckCard: (state, action) => {
+            let { rectCardDeck } = action.payload
+            state.rectDeckCard = rectCardDeck
+        },
+        increSkip: (state, action) => {
+            state.skip++
+            state.selectedCards = []
+            if (state.skip == state.numberOfPlayers - 1) {
+                state.skip = 0
+                state.cardInTable = []
+            }
+            state.turn++
         }
+
     }
 
 })

@@ -1,10 +1,13 @@
 import React, { useRef } from 'react';
 import styles from "./Card.module.css";
 import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { disPatchMethods } from '../playingRedux/playingStore';
+import { disPatchMethods, playingStore } from '../playingRedux/playingStore';
 import { useSelector, useDispatch } from 'react-redux';
 
 const Card = ({ imageName, cardRects, cardIndex }) => {
+
+    const rectCardDeck = playingStore.getState().rectDeckCard
+
     const dispatch = useDispatch();
     const selectedCards = useSelector((state) => state.selectedCards);
     const imageFolder = "../../../public/cardImages/";
@@ -35,7 +38,7 @@ const Card = ({ imageName, cardRects, cardIndex }) => {
             return;
         }
 
-        dispatch(disPatchMethods.changeSelectedStatus({ cardIndex }));
+        dispatch(disPatchMethods.changeSelectedStatus({ imageName }));
     };
 
     const handleDragEndCard = (event, info) => {
@@ -44,33 +47,34 @@ const Card = ({ imageName, cardRects, cardIndex }) => {
 
         if (backClose) return;
 
-        if (info.offset.y < -400) {
-
-            //valid logic
-
-
-            //if false => return
+        if (info.offset.y < -400 || info.offset.y > 400) {
             x.set(0);
             y.set(0);
             return;
-            //removecard on hand
-
-            //clear and add new to table
-
-
-            //change turn
         }
-
-        // Nếu kéo nhẹ, giữ vị trí mới (hoặc có thể snap back tùy logic game)
+        let index = cardIndex
+        for (let i = 0; i < cardRects.length; i++) {
+            if (cardRects[i].x > info.point.x) {
+                index = i - 1
+                break
+            }
+        }
         x.set(0);
         y.set(0);
+
+        dispatch(disPatchMethods.changeCard({ indexFirst: index, indexSecond: cardIndex }))
     };
+
+    function handleDragging(event, info) {
+        isDragging.current = true;
+    }
+
 
     return (
         <motion.div
             className={styles["cardContainer"]}
             style={{
-                marginTop: selectedCards.includes(cardIndex) ? "-150px" : "0px",
+                marginTop: selectedCards.includes(imageName) ? "-150px" : "0px",
             }}
         >
             {!isOpen && (
@@ -88,20 +92,20 @@ const Card = ({ imageName, cardRects, cardIndex }) => {
             )}
 
             <motion.img
-                style={{ x, y }}
+                style={{ x, y, position: "absolute" }}
                 onClick={handleClickOpen}
                 drag
                 dragMomentum={false}
                 // dragElastic={0.2} // Tạo cảm giác kéo tự nhiên
-                onDragStart={(event, info) => {
-                    isDragging.current = true;
-                }}
+                onDragStart={handleDragging}
                 onDragEnd={handleDragEndCard}
                 className={styles['img1']}
                 src={`./public/cardImages/${imageName}`}
                 animate={{
                     rotateY: !imgClose ? 90 : 0,
                     scale: dragOnTable ? 0.8 : 1,
+                    // top: rectCardDeck.top,
+                    // left: rectCardDeck.left
                 }}
                 transition={{
                     rotateY: { duration: dur },
