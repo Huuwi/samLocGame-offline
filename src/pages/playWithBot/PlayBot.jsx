@@ -1,20 +1,15 @@
 import React, { use, useEffect, useRef, useState } from 'react';
-import styles from "./Play.module.css";
-import DivCard from './componentPlaying/divCard/DivCard';
-import { disPatchMethods, playingStore } from './playingRedux/playingStore';
+import styles from "./PlayBot.module.css";
+import DivCard from '../play/componentPlaying/divCard/DivCard';
+import { disPatchMethods, playingStore } from '../play/playingRedux/playingStore';
 import { useDispatch } from 'react-redux';
-import AnimateDivCard from './componentPlaying/animateDivCard/AnimateDivCard';
-import { divCard } from './logic.mjs';
-import Card from './card/Card';
-import CardsOfPlayers from './componentPlaying/CardsOfPlayers/CardsOfPlayers';
-import Test from './Test';
-import { playing } from './logic.mjs';
-import CardInTable from './componentPlaying/CardInTable/CardInTable';
-import Clock from './componentPlaying/clock/Clock';
-
+import AnimateDivCard from '../play/componentPlaying/animateDivCard/AnimateDivCard';
+import { divCard } from '../play/logic.mjs';
+import CardsOfPlayers from '../play/componentPlaying/CardsOfPlayers/CardsOfPlayers';
+import { playing } from '../play/logic.mjs';
+import CardInTable from '../play/componentPlaying/CardInTable/CardInTable';
+import Clock from '../play/componentPlaying/clock/Clock';
 const Play = ({ players }) => {
-
-    console.log("re-render");
 
     const [myCards, setMyCards] = useState([]);
 
@@ -101,6 +96,8 @@ const Play = ({ players }) => {
     }, [clickDiv])
 
     function handleClickPlay() {
+        console.log(playingStore.getState().valueCardPlayers[0]);
+
         const selectedCards = playingStore.getState().selectedCards
         const cardInTable = playingStore.getState().cardInTable
         let selectedCardType = playing.indentifyTypeCards(selectedCards)
@@ -159,10 +156,11 @@ const Play = ({ players }) => {
             </div>
             {<button className={styles["fightBtn"]} onClick={handleClickPlay} >Danh bai</button>}
 
-            {<button className={styles["skipBtn"]} onClick={handleClickSkip}  >Bo qua</button>}
+            {<button className={styles["skipBtn"]} onClick={handleClickSkip} >Bo qua</button>}
 
             {divDone ? myCards : null}
             {divDone ? <Clock time={30} /> : null}
+
 
         </div>);
 };

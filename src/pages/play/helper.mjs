@@ -3,11 +3,11 @@ const checkStraight = (n) => {
 
     let numbers = [...n]
     let rest = 0
-    if (numbers.includes(15) && numbers.includes(3) && numbers.includes(14)) {
+    if (numbers.includes(16) && numbers.includes(3) && numbers.includes(14)) {
         numbers.splice(numbers.length - 2, 2)
         rest = 26
     }
-    if (numbers.includes(15) && numbers.includes(3)) {
+    if (numbers.includes(16) && numbers.includes(3)) {
         numbers.splice(numbers.length - 1, 1)
         rest = 13
     }

@@ -27,7 +27,7 @@ const CardsOfPlayers = () => {
             }
         })
         setCardRects(rs)
-    }, [cardOfPlayer]) // Trigger when cardOfPlayer changes
+    }, [cardOfPlayer])
 
     return (
         <div style={{ display: "flex", gap: "150px", marginRight: "200px" }}>

@@ -3,7 +3,7 @@ import helper from "./helper.mjs"
 // initial value
 
 let cardDefine = [
-    { name: '2_of_', value: 15, },
+    { name: '2_of_', value: 16, },
     { name: '3_of_', value: 3, },
     { name: '4_of_', value: 4, },
     { name: '5_of_', value: 5, },
@@ -20,7 +20,7 @@ let cardDefine = [
 
 let cardTypes = ["clubs.png", "diamonds.png", "hearts.png", "spades.png"]
 
-let cards = []
+export let cards = []
 
 
 for (let m of cardDefine) {

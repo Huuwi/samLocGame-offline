@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import styles from "./DivCard.module.css"
+import { useSelector } from 'react-redux'
 
-const DivCard = ({ number, disPlay, quantiy }) => {
+const DivCard = ({ disPlay, playerIndex }) => {
 
-    let [nums, setNums] = useState(number)
-
-    useEffect(() => {
-
-    }, [nums])
+    let valueCardPlayers = useSelector((state) => { return state.valueCardPlayers })
 
     return (
         <>
             {disPlay ? <div className={styles['divCardContainer']}>
-                <p style={{ textAlign: "center" }} > {number}</p>
-            </div> : <p>0</p>}
+                <p style={{ textAlign: "center" }} > {valueCardPlayers[playerIndex]?.length || 0}</p>
+            </div> : null}
         </>
     )
 }

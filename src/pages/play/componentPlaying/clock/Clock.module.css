@@ -1,0 +1,36 @@
+.clockContainer {
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #e0f7fa, #80deea);
+    /* Nền gradient */
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 9999;
+    border: 2px solid #00acc1;
+}
+
+.secondHand {
+    height: 50px;
+    width: 2px;
+    background-color: #d32f2f;
+    /* Màu đỏ nổi bật */
+    transform-origin: bottom center;
+    position: absolute;
+    bottom: 60%;
+    border-radius: 1px;
+}
+
+.time {
+    font-size: 24px;
+    color: #00796b;
+    font-weight: bold;
+    margin-top: 65px;
+    font-family: 'Courier New', Courier, monospace;
+}

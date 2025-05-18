@@ -16,7 +16,7 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path='/' element={<Card imgPath={'king_of_hearts.png'} />} />
+      <Route path='/' element={<HomePage />} />
       <Route path='/table' element={<Play players={demoPlayers} />} />
 
     </Routes>
