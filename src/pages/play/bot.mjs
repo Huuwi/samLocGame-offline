@@ -13,6 +13,113 @@ function randomNElement(arr0, n) {
 }
 
 
+function findCardCanPlay({ length, value, type }, mixedCards) {
+    if (type == "Straight") {
+        return mixedCards.filter((e) => {
+            return e.type == type && e.value > value && e.length == length
+        })
+    }
+    return mixedCards.filter((e) => {
+        return e.type == type && e.value > value
+    })
+}
+
+
+function responseSingleType(value, mixedCards, cardsOfBot) {
+
+    let cob = cardsOfBot.map((e) => {
+        return {
+            prio: 0,
+            ...e
+        }
+    })
+
+    let mc = [...mixedCards]
+
+    let cs = []
+
+    for (let e of mc) {
+        cs.push(
+            {
+                cards: e.cards.map((el) => {
+                    return el.card
+                }),
+                type: e.type
+            }
+        )
+    }
+
+
+    for (let i = 0; i < cob.length; i++) {
+        for (let e of cs) {
+            if (e.cards.includes(cob[i].card)) {
+                if (e.cards.length > 3 && e.type == "Straight" && (cob[i].card == e.cards[0] || cob[i].card == e.cards[e.cards.length - 1])) {
+                    cob[i].prio -= 1
+                } else {
+                    cob[i].prio -= 2
+                }
+            }
+        }
+    }
+
+    cob.sort((a, b) => { return a.prio - b.prio })
+
+    let minCard = cob.filter((e) => {
+        return e.prio == cob[cob.length - 1].prio && e.value > value
+    }).sort((a, b) => { return a.value - b.value })[0] || null
+
+
+    return minCard
+
+}
+
+function responseRestType(canPlayCards, mixedCards) {
+    let mc = [...mixedCards]
+    let cpl = canPlayCards.map((e) => {
+        return {
+            prio: 0,
+            ...e
+        }
+    })
+    let cs = []
+    for (let e of mc) {
+        cs.push(
+            {
+                cards: e.cards.map((el) => {
+                    return el.card
+                }),
+                type: e.type
+            }
+        )
+    }
+
+
+    for (let i = 0; i < cpl.length; i++) {
+        for (let k of cpl[i].cards) {
+            for (let e of cs) {
+                if (e.cards.includes(k.card)) {
+                    if (e.cards.length > 3 && e.type == "Straight" && (k.card == e.cards[0] || k.card == e.cards[e.cards.length - 1])) {
+                        cpl[i].prio -= 1
+                    } else {
+                        cpl[i].prio -= 2
+                    }
+                }
+            }
+        }
+    }
+
+    cpl.sort((a, b) => { return a.prio - b.prio })
+
+
+    let minCard = cpl.filter((e) => {
+        return e.prio == cpl[cpl.length - 1].prio
+    }).sort((a, b) => { return a.value - b.value })[0] || null
+
+    return minCard
+}
+
+
+
 export class Bot {
 
     numCardPlayed
@@ -40,7 +147,7 @@ export class Bot {
                 break;
 
             case 2:
-                this.cardsOfBot = randomNElement(restCards, 10).map((e) => {
+                this.cardsOfBot = randomNElement(restCards, 20).map((e) => {
                     return {
                         card: e,
                         value: cardMap.get(e)
@@ -61,8 +168,6 @@ export class Bot {
                 break;
         }
         this.cardsOfBot.sort((a, b) => { return a.value - b.value })
-        console.log(this.cardsOfBot);
-
     }
 
 
@@ -122,22 +227,24 @@ export class Bot {
                             case 3:
                                 mixCardArr.push({
                                     type: "Three of a Kind",
-                                    value: this.cardsOfBot.value * 3,
+                                    value: this.cardsOfBot[i].value * 3,
                                     cards: [this.cardsOfBot[i], this.cardsOfBot[i + 1], this.cardsOfBot[i + 2]]
-
                                 })
+                                break;
 
                             case 4:
                                 mixCardArr.push({
                                     type: "Four of a Kind",
-                                    value: this.cardsOfBot.value * 3,
-                                    cards: [this.cardsOfBot[i], this.cardsOfBot[i + 1], this.cardsOfBot[i + 2], sortedMapArr[i + 3]]
+                                    value: this.cardsOfBot[i].value * 4,
+                                    cards: [this.cardsOfBot[i], this.cardsOfBot[i + 1], this.cardsOfBot[i + 2], this.cardsOfBot[i + 3]]
                                 })
+                                break;
 
                             default:
                                 break;
                         }
                     } else {
+                        countDuplicate = 0
                         dupFlag = true
                     }
 
@@ -145,13 +252,50 @@ export class Bot {
 
             }
         }
-
         return mixCardArr
 
     }
 
     responsePlayer(cardInTable) {
+
+        const mixedCards = this.mixCard()
         let { length, value, type } = cardInTable
+        let choose = null
+        let canPlayCards = findCardCanPlay(cardInTable, mixedCards)
+
+        switch (type) {
+            case "Single":
+                let singleChoose = responseSingleType(value, mixedCards, this.cardsOfBot)
+                if (singleChoose) {
+                    choose = {
+                        type,
+                        value: singleChoose?.value || null,
+                        cards: [singleChoose?.card || null],
+                        length
+                    }
+                } else {
+                    choose = null
+                }
+
+                break;
+
+            default:
+                let restChoose = responseRestType(canPlayCards, mixedCards)
+                if (restChoose) {
+                    choose = {
+                        type,
+                        value: restChoose?.value || null,
+                        cards: restChoose?.cards || null,
+                        length
+                    }
+                } else {
+                    choose = null
+                }
+
+                break;
+        }
+
+        return choose
 
     }
 

@@ -14,7 +14,16 @@ let a = [
 ]
 const myBot = new Bot(a.map((e) => { return e.card }), 2)
 
+console.log(myBot.cardsOfBot)
 
-console.log(myBot.mixCard());
+console.log(myBot.mixCard().map((e) => { return e.cards }));
+
+
+console.log(myBot.responsePlayer({
+    type: "Straight",
+    length: 4,
+    value: 0
+}));
+
 
 
